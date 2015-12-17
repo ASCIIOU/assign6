@@ -58,6 +58,8 @@ void draw()
 {
 	if (state == GameState.START) {
 		bg.draw();	
+   if(mousePressed && mouseX >= width/3 && mouseX <= 2*width/3 && mouseY >=380 && mouseY <=415) { 
+      state = GameState.PLAYING;} 
 	}
 	else if (state == GameState.PLAYING) {
 		bg.draw();
@@ -136,4 +138,3 @@ void keyReleased(){
     }
   }
 }
-
