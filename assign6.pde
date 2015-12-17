@@ -25,23 +25,28 @@ class FlightType
 	static final int ENEMYSTRONG = 2;
 }
 
-int state = GameState.START;
-int currentType = EnemysShowingType.STRAIGHT;
-int enemyCount = 8;
-Enemy[] enemys = new Enemy[enemyCount];
-Fighter fighter;
-Background bg;
-FlameMgr flameMgr;
-Treasure treasure;
-HPDisplay hpDisplay;
+int state = GameState.START; 
+int currentType = EnemysShowingType.STRAIGHT; 
+int enemyCount = 8; 
+int bulletCount = 5; 
+Enemy[] enemys = new Enemy[enemyCount]; 
+Fighter fighter; 
+Background bg; 
+FlameMgr flameMgr; 
+Treasure treasure; 
+HPDisplay hpDisplay; 
+boolean [] bulletsLimit = new boolean[bulletCount]; 
+Bullet []bullets = new Bullet[bulletCount]; 
+int b=0; 
+int bulletsNum=0; 
+boolean isMovingUp; 
+boolean isMovingDown; 
+boolean isMovingLeft; 
+boolean isMovingRight; 
 
-boolean isMovingUp;
-boolean isMovingDown;
-boolean isMovingLeft;
-boolean isMovingRight;
+int time; 
+int wait = 4000; 
 
-int time;
-int wait = 4000;
 
 
 
@@ -87,7 +92,27 @@ void draw()
 				}
 			}
 		}
-		// 這地方應該加入Fighter 血量顯示UI
+for(int i=0; i<bulletCount;i++){ 
+      if(bullets[i]!=null){ 
+        bullets[i].draw(); 
+        bullets[i].Fly(); 
+        if(bullets[i].x<-bullets[i].bulletImg.width){ 
+          bullets[i]=null; 
+        } 
+         for(int j=0; j<enemyCount; j++){ 
+           if (enemys[j]!=null && enemys[j].isCollideWithBullet(i)) { 
+                            enemys[j].life--; 
+                            bullets[i]=null; 
+                         if (enemys[j].life == 0) { 
+                         flameMgr.addFlame(enemys[j].x, enemys[j].y); 
+                         enemys[j]=null; 
+        } 
+       } 
+      } 
+     } 
+    } 
+      hpDisplay.updateWithFighterHP(fighter.hp); 
+
 		
 	}
 	else if (state == GameState.END) {
@@ -121,8 +146,13 @@ void keyReleased(){
     default :break ;
   }
   if (key == ' ') {
-  	if (state == GameState.PLAYING) {
-		fighter.shoot();
+  	if (state == GameState.PLAYING) { 
+     if(bullets[0]!=null&&bullets[1]!=null&&bullets[2]!=null&&bullets[3]!=null&&bullets[4]!=null){ 
+         }else{ 
+           fighter.shoot(b); 
+           b++; 
+           b=b%5; 
+         } 
 	}
   }
   if (key == ENTER) {
